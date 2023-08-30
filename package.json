@@ -15,7 +15,8 @@
     "start-server": "cd backend && node server.js",
     "install-client": "cd frontend && npm install",
     "build-client": "cd frontend && npm run build",
-    "start-client": "cd frontend && npm run start"
+    "start-client": "cd frontend && npm run start",
+    "render-post": "npm install --prefix frontend && npm run build --prefix frontend"
   },
   "keywords": [],
   "author": "Kavin S",
