@@ -32,13 +32,27 @@ function App() {
             <Route path='/placeorder' element={<PlaceOrderScreen />} />
             <Route path='/admin/userslist' element={<UserListScreen />} />
             <Route path='/admin/productslist' element={<ProductListScreen />} />
+            <Route
+              path='/admin/productslist/:pageNumber'
+              element={<ProductListScreen />}
+              exact
+            />
             <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
-            <Route path='/admin/product/:id/edit' element={<ProductEditScreen />} />
+            <Route
+              path='/admin/product/:id/edit'
+              element={<ProductEditScreen />}
+            />
             <Route path='/orders/:id' element={<OrderScreen />} />
             <Route path='/login' element={<LoginScreen />} />
+            <Route path='/search/:keyword' element={<HomeScreen />} />
+            <Route
+              path='/search/:keyword/pageNumber/:pageNumber'
+              element={<HomeScreen />}
+            />
+            <Route path='/pageNumber/:pageNumber' element={<HomeScreen />} />
             <Route path='/' element={<HomeScreen />} exact />
             <Route path='/products/:id' element={<ProductScreen />} />
-            <Route path='/cart/:id?' element={<CartScreen />} />        
+            <Route path='/cart/:id?' element={<CartScreen />} />
           </Routes>
         </Container>
       </main>
