@@ -6,14 +6,23 @@ import {
   ListGroup,
   ListGroupItem,
   Card,
+  Button,
 } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { getOrderDetails, updatePaidStatus } from "../action/orderAction";
+import {
+  getOrderDetails,
+  updateDeliveredStatus,
+  updatePaidStatus,
+} from "../action/orderAction";
 import axios from "axios";
 import { PayPalButton } from "react-paypal-button-v2";
+import {
+  ORDER_DELIVERED_RESET,
+  ORDER_PAY_RESET,
+} from "../constants/orderConstants";
 
 const OrderScreen = () => {
   const dispatch = useDispatch();
@@ -23,8 +32,18 @@ const OrderScreen = () => {
   const orderDetails = useSelector((state) => state.orderDetails);
   const { error, loading, order } = orderDetails;
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   const orderPay = useSelector((state) => state.orderPay);
   const { success: successPay, loading: loadingPay } = orderPay;
+
+  const orderDelivered = useSelector((state) => state.orderDelivered);
+  const {
+    error: errorDelivered,
+    success: successDelivered,
+    loading: loadingDelivered,
+  } = orderDelivered;
 
   useEffect(() => {
     const addPaypalScript = async () => {
@@ -39,7 +58,9 @@ const OrderScreen = () => {
       document.body.appendChild(script);
     };
 
-    if (!order || successPay) {
+    if (!order || successPay || successDelivered) {
+      dispatch({ type: ORDER_PAY_RESET });
+      dispatch({ type: ORDER_DELIVERED_RESET });
       dispatch(getOrderDetails(id));
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -48,10 +69,14 @@ const OrderScreen = () => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, successPay, order, id]);
+  }, [dispatch, successPay, successDelivered, order, id]);
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(updatePaidStatus(id, paymentResult));
+  };
+
+  const deliverHandler = () => {
+    dispatch(updateDeliveredStatus(order));
   };
 
   return loading ? (
@@ -175,6 +200,23 @@ const OrderScreen = () => {
                   )}
                 </ListGroupItem>
               )}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroupItem>
+                    {errorDelivered && (
+                      <Message variant='danger'>{errorDelivered}</Message>
+                    )}
+                    {loadingDelivered && <Loader />}
+                    <Button
+                      onClick={deliverHandler}
+                      className='btn btn-primary'
+                    >
+                      Mark As Delivered
+                    </Button>
+                  </ListGroupItem>
+                )}
             </ListGroup>
           </Card>
         </Col>
