@@ -27,7 +27,7 @@ const TopReviewCarousel = () => {
           {products?.map((product) => (
             <Carousel.Item key={product._id}>
               <Link to={`/products/${product._id}`}>
-                <Image src={product.image} alt={product.image} fluid />
+                <Image src={product.image} alt={product.image} />
                 <Carousel.Caption className='carousel-caption'>
                   <h2>
                     {product.name} (Rs.{product.price})
