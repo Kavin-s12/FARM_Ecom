@@ -9,6 +9,7 @@ const REDIS_PORT = process.env.REDIS_PORT || 6379;
 const redisClient = redis.createClient({
   host: REDIS_HOST,
   port: REDIS_PORT,
+  enableReadyCheck: false,
 });
 
 redisClient.on("error", (err) => {
