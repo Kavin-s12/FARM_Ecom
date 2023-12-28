@@ -7,11 +7,23 @@ import userRouter from "./routers/userRouter.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import orderRouter from "./routers/orderRouter.js";
 import uploadRouter from "./routers/uploadRoutes.js";
+import redisClient from "./redisClient.js";
 
 const app = express();
 dotenv.config();
 
 connectdb();
+
+const PORT = process.env.PORT || 5000;
+
+redisClient
+  .connect()
+  .then(() => {
+    console.log("Connected to Redis");
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
 
 app.use(express.json());
 app.use("/api/products", productRouter);
@@ -36,8 +48,6 @@ if (process.env.NODE_ENV == "production") {
 
 app.use(notFound);
 app.use(errorHandler);
-
-const PORT = process.env.PORT || 5000;
 
 app.listen(
   PORT,

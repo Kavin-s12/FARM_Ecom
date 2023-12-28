@@ -1,5 +1,6 @@
 import Product from "../models/productModel.js";
 import asyncHandler from "express-async-handler";
+import redisClient from "../redisClient.js";
 
 //@desc     fetch all product
 //@api      GET /api/products/
@@ -29,6 +30,8 @@ export const getProducts = asyncHandler(async (req, res) => {
 export const getProductById = asyncHandler(async (req, res) => {
   const foundProduct = await Product.findById(req.params.id);
   if (foundProduct) {
+    const serializedProduct = JSON.stringify(foundProduct);
+    redisClient.setEx(req.params.id, 3600, serializedProduct);
     res.status(200).send(foundProduct);
   } else {
     res.status(404).send({ message: "product not found" });
