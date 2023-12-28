@@ -16,7 +16,7 @@ redisClient.on("error", (err) => {
 });
 
 redisClient.on("ready", () => {
-  console.log(`Redis is ready : ${REDIS_PORT}`);
+  console.log(`Redis is ready : ${REDIS_HOST}`);
 });
 
 redisClient.on("end", () => {

@@ -23,6 +23,7 @@ redisClient
   })
   .catch((err) => {
     console.log(err.message);
+    redisClient.quit();
   });
 
 app.use(express.json());
