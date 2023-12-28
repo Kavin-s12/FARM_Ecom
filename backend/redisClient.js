@@ -3,13 +3,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const REDIS_HOST = process.env.REDIS_HOST || "localhost";
-const REDIS_PORT = process.env.REDIS_PORT || 6379;
+const REDIS_URL = process.env.REDIS_URL || 6379;
 
 const redisClient = redis.createClient({
-  host: REDIS_HOST,
-  port: REDIS_PORT,
-  enableReadyCheck: false,
+  url: process.env.REDIS_URL || REDIS_URL,
 });
 
 redisClient.on("error", (err) => {
@@ -17,7 +14,7 @@ redisClient.on("error", (err) => {
 });
 
 redisClient.on("ready", () => {
-  console.log(`Redis is ready : ${REDIS_HOST}`);
+  console.log(`Redis is ready : ${REDIS_URL}`);
 });
 
 redisClient.on("end", () => {
