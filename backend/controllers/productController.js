@@ -66,7 +66,7 @@ export const deleteProductById = asyncHandler(async (req, res) => {
 export const createProduct = asyncHandler(async (req, res) => {
   const product = new Product({
     name: "sample name",
-    image: "/images/coconut.jfif",
+    image: "/images/sample.jpg",
     description: "sample description",
     category: "sample category",
     brand: "sample brand",
