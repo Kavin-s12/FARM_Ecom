@@ -16,3 +16,16 @@ export const Cache = asyncHandler(async (req, res, next) => {
     next(error);
   }
 });
+
+export const removeCache = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const data = await redisClient.get(id);
+    if (data !== null) {
+      redisClient.del(id);
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
